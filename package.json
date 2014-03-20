@@ -1,0 +1,32 @@
+{
+  "name": "metalsmith-coffee",
+  "version": "0.0.1",
+  "description": "a coffee-script plugin for metalsmith",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha --recursive ./test/specs",
+    "coffee": "coffee -co ./ ./src",
+    "dev": "npm run coffee && npm run test"
+  },
+  "keywords": [
+    "metalsmith",
+    "coffee-script"
+  ],
+  "license": "MIT",
+  "author": "Afonso Martins <joaoafrmartins@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/joaoafrmartins/metalsmith-coffee"
+  },
+  "dependencies": {
+    "coffee-script": "~1.7.1",
+    "async": "~0.2.10"
+  },
+  "devDependencies": {
+    "metalsmith": "~0.4.0",
+    "chai": "~1.9.1",
+    "assert-dir-equal": "~1.0.1",
+    "mocha": "~1.18.2",
+    "rimraf": "~2.2.6"
+  }
+}
