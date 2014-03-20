@@ -1,4 +1,4 @@
-# metalsmith-less
+# metalsmith-coffee
 
 [![Build Status](https://travis-ci.org/christophercliff/metalsmith-less.png?branch=master)](https://travis-ci.org/christophercliff/metalsmith-less)
 
@@ -50,6 +50,8 @@ $ npm test
 ## License
 
 MIT License, see [LICENSE](https://github.com/joaoafrmartins/metalsmith-coffee/blob/master/LICENSE.md) for details.
+
+## Credits
 
 This metalsmith plugin is an adaptation of the Metalsmith [LESS][less] plugin by Cristopher Cliff 
 
