@@ -21,7 +21,7 @@
   describe('metalsmith-coffee', function() {
     var expected, source, target;
     expected = source = target = void 0;
-    it('should compile coffee script', function(done) {
+    return it('should compile coffee script', function(done) {
       source = resolve('./test/fixtures/basic');
       target = resolve('./test/fixtures/basic/build');
       expected = resolve('./test/fixtures/basic/expected');
@@ -32,9 +32,6 @@
         assertDirEqual(expected, target);
         return done();
       });
-    });
-    return afterEach(function(done) {
-      return rimraf(target, done);
     });
   });
 

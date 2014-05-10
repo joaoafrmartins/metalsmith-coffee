@@ -1,64 +1,85 @@
-path = require 'path'
-join = path.join
+{ join } = require "path"
 
-async = require 'async'
 coffee = require 'coffee-script'
 
-module.exports = (options={}) ->
+async = require 'async'
 
-	try
-		
-		for name in ["filter", "output"]
+class Coffee
 
-			if options[name] and typeof options[name] != "function"
+	constructor: (options) ->
 
-				throw new Error "invalid option #{name}! option #{name} is not a function!"
+		class Middleware
 
-	catch error then console.log error.message
+			constructor: (@options) ->
 
+				@regex = coffee.FILE_EXTENSIONS.join("$|")
 
-	regex = coffee.FILE_EXTENSIONS.join("$|")
+				@regex = new RegExp @regex.replace(/\./g,"\\.") + "$", "g"
 
-	regex = new RegExp regex.replace(/\./g,"\\.") + "$", "g"
+				if typeof @options isnt "object"
 
-	filter = (filepath) ->
+					@options = {}
 
-		return regex.test filepath
+				for method in ["filter", "output"]
 
-	output = (filepath) ->
+					if @options[method] and 
 
-		return filepath.replace(regex, '.js')
+					typeof @options[method] isnt "function"
 
-	convert = (options, files, source, done) ->
+						delete @options[method]
 
-		data = files[source]
+						console.error "invalid option.#{method} method"
 
-		if not data or not data.contents then return done new Error 'data does not exist'
+			filter: (filepath) =>
 
-		try
+				return @regex.test filepath
 
-			contents = coffee.compile(data.contents.toString(), options)
+			output: (filepath) =>
 
-			files[(options.output || output)(source)] =
+				return filepath.replace(@regex, '.js')
 
-				contents: new Buffer contents
-		  
-		catch err then return done err
+			convert: (options, files, source, done) =>
 
-		return done null
-	
-	return (files, metalsmith, done) ->
-		
-		try
-			
-			paths = Object.keys(files).filter(options.filter || filter )
+				data = files[source]
 
-		catch err then return done err
+				if not data or not data.contents
 
-		async.each paths, convert.bind(null, options, files), (err) ->
+					message = 'data does not exist'
 
-			if err then return done err
+					return done new Error message
 
-			if not options.preserveSources then	paths.map (file) -> delete files[file]
+				try
 
-			done null
+					contents = coffee.compile(data.contents.toString(), options)
+
+					files[(options.output || @output)(source)] =
+
+						contents: new Buffer contents
+
+					return done null
+
+				catch then return done err			
+
+			plugin: (files, metalsmith, done) ->
+
+				try
+
+					paths = Object.keys(files).filter(@options.filter || @filter )
+
+				catch err then return done err
+
+				async.each paths, @convert.bind(null, @options, files), (err) =>
+
+					if err then return done err
+
+					if not @options.preserveSources 
+
+						paths.map (file) -> delete files[file]
+
+					done null
+
+		middleware = new Middleware options
+
+		return middleware.plugin.bind(middleware)
+
+module.exports = Coffee

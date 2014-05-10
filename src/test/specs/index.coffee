@@ -36,6 +36,3 @@ describe 'metalsmith-coffee', () ->
 
 			done()
 
-	afterEach (done) ->
-
-		rimraf target, done
