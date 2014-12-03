@@ -58,7 +58,7 @@ class Coffee
 
 					return done null
 
-				catch then return done err			
+				catch err then return done err			
 
 			plugin: (files, metalsmith, done) ->
 
