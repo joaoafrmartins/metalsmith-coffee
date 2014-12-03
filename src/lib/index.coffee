@@ -32,7 +32,7 @@ class Coffee
 
 			filter: (filepath) =>
 
-				return @regex.test filepath
+				return filepath.match @regex
 
 			output: (filepath) =>
 
