@@ -62,7 +62,7 @@ class Coffee
 
 					if options.sourceMap
 						files[outputFile] =
-							contents: new Buffer(contents.js + '\n//# sourceMappingURL=' + basename(outputMap))
+							contents: new Buffer(contents.js + '//# sourceMappingURL=' + basename(outputMap))
 						files[outputMap] =
 							contents: new Buffer contents.v3SourceMap
 					else
