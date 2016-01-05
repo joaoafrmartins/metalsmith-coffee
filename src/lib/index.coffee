@@ -56,6 +56,7 @@ class Coffee
 					outputMap = basename((options.output || @output)(source) + '.map') if options.sourceMap
 					options.generatedFile = basename outputFile if options.sourceMap
 					options.sourceFiles = [ basename(outputFile) ] if options.sourceMap
+					options.inline = true if options.sourceMap
 
 					contents = coffee.compile(data.contents.toString(), options)
 
@@ -84,7 +85,7 @@ class Coffee
 
 					if err then return done err
 
-					if not @options.preserveSources or @options.sourceMap
+					if not @options.preserveSources
 
 						paths.map (file) -> delete files[file]
 
