@@ -22,7 +22,7 @@ class Coffee
 
 				for method in ["filter", "output"]
 
-					if @options[method] and 
+					if @options[method] and
 
 					typeof @options[method] isnt "function"
 
@@ -52,13 +52,21 @@ class Coffee
 
 					contents = coffee.compile(data.contents.toString(), options)
 
-					files[(options.output || @output)(source)] =
+					outputFile = (options.output || @output)(source)
+					outputMap = (options.output || @output)(source) + '.map' if options.sourceMap
 
-						contents: new Buffer contents
+					if options.sourceMap
+						files[outputFile] =
+							contents: new Buffer(contents.js + '\n//# sourceMappingURL='+outputMap)
+						files[outputMap] =
+							contents: new Buffer contents.v3SourceMap
+					else
+						files[outputFile] =
+							contents: new Buffer contents
 
 					return done null
 
-				catch then return done err			
+				catch err then return done err
 
 			plugin: (files, metalsmith, done) ->
 
@@ -72,7 +80,7 @@ class Coffee
 
 					if err then return done err
 
-					if not @options.preserveSources 
+					if not @options.preserveSources
 
 						paths.map (file) -> delete files[file]
 
