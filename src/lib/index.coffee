@@ -54,7 +54,7 @@ class Coffee
 
 					outputFile = (options.output || @output)(source)
 					outputMap = (options.output || @output)(source) + '.map' if options.sourceMap
-					options.generatedFile = basename outputFile if options.sourceMap
+					# options.generatedFile = basename outputFile if options.sourceMap
 					options.sourceFiles = [ basename(source) ] if options.sourceMap
 					options.inline = true if options.sourceMap
 
