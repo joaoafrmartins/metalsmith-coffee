@@ -1,5 +1,7 @@
 { join } = require "path"
 
+{ basename } = require "path"
+
 coffee = require 'coffee-script'
 
 async = require 'async'
@@ -50,14 +52,16 @@ class Coffee
 
 				try
 
-					contents = coffee.compile(data.contents.toString(), options)
-
 					outputFile = (options.output || @output)(source)
-					outputMap = (options.output || @output)(source) + '.map' if options.sourceMap
+					outputMap = basename((options.output || @output)(source) + '.map') if options.sourceMap
+					options.generatedFile = basename outputFile if options.sourceMap
+					options.sourceFiles = [ basename(outputFile) ] if options.sourceMap
+
+					contents = coffee.compile(data.contents.toString(), options)
 
 					if options.sourceMap
 						files[outputFile] =
-							contents: new Buffer(contents.js + '\n//# sourceMappingURL='+outputMap)
+							contents: new Buffer(contents.js + '\n//# sourceMappingURL=' + basename(outputMap))
 						files[outputMap] =
 							contents: new Buffer contents.v3SourceMap
 					else
@@ -80,7 +84,7 @@ class Coffee
 
 					if err then return done err
 
-					if not @options.preserveSources
+					if not @options.preserveSources or @options.sourceMap
 
 						paths.map (file) -> delete files[file]
 
