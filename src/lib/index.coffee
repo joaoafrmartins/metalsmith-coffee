@@ -48,7 +48,7 @@ class Coffee
 
 					message = 'data does not exist'
 
-					# conflicts with metalsmoth-watch
+					# conflicts with metalsmith-watch
 					return done null
 
 				try
